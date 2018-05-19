@@ -1,0 +1,17 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/custom_toast_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="80dp"
+    android:layout_marginLeft="40dp"
+    android:layout_marginRight="40dp"
+    >
+
+    <TextView
+        android:id="@+id/textToShow"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="MESSAGING IS DONE HERE"
+        android:textColor="#FFF"
+        android:textSize="14sp" />
+</RelativeLayout>

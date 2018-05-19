@@ -8,4 +8,24 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="rippleEffectForImageIcon">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="TextLabel" parent="AppTheme">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@color/color_A6A6A6</item>
+        <item name="colorControlNormal">@color/color_DDDDDD</item>
+        <item name="colorControlActivated">@color/color_0CB88F</item>
+        <item name="colorControlHighlight">@color/color_0CB88F</item>
+
+    </style>
+
 </resources>
