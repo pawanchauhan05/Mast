@@ -17,7 +17,7 @@ import java.util.Map;
 
 
 /**
- * Created by pawansingh on 27/01/18.
+ * Created by pawansingh on 19/05/18.
  */
 
 public class RecyclerAdapterUtil extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

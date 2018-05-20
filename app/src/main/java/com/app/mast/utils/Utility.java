@@ -1,5 +1,6 @@
 package com.app.mast.utils;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
@@ -54,5 +55,35 @@ public class Utility {
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(layout);
         toast.show();
+    }
+
+    /**
+     * this function is used to show default progress dialog.
+     *
+     * @param title - progress dialog title
+     * @param message - progress dialog message
+     * @param progressDialog - progress dialog object (not be null)
+     */
+    public void showProgressBar(String title, String message, ProgressDialog progressDialog) {
+        if(progressDialog != null) {
+            progressDialog.setTitle(title);
+            progressDialog.setMessage(message);
+            progressDialog.show();
+            progressDialog.setCancelable(true);
+        }
+    }
+
+    /**
+     * this function is used to hide progress dialog.
+     *
+     * @param progressDialog - progress dialog object (not be null)
+     */
+    public void hideProgressBar(ProgressDialog progressDialog) {
+        try {
+            if (progressDialog != null)
+                progressDialog.cancel();
+        } catch(IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 }

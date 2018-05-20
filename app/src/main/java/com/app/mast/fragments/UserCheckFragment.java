@@ -1,13 +1,13 @@
 package com.app.mast.fragments;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +35,7 @@ public class UserCheckFragment extends Fragment implements View.OnClickListener 
     private Button buttonSubmit;
     private View view;
     private TextInputLayout nameWrapper;
+    private ProgressDialog progressDialog;
 
     public UserCheckFragment() {
         // Required empty public constructor
@@ -57,6 +58,7 @@ public class UserCheckFragment extends Fragment implements View.OnClickListener 
         nameWrapper = view.findViewById(R.id.nameWrapper);
 
         ((MainActivity) getActivity()).setToolBarTitle("Check User");
+        progressDialog = new ProgressDialog(getContext());
     }
 
     private void validateUserName() {
@@ -103,6 +105,7 @@ public class UserCheckFragment extends Fragment implements View.OnClickListener 
     }
 
     private void getUser(final String userName) {
+        Utility.getInstance().showProgressBar("Please wait", "Connecting to server...", progressDialog);
         MainActivity.USER = userName;
         ApiClient
                 .getClient()
@@ -113,6 +116,7 @@ public class UserCheckFragment extends Fragment implements View.OnClickListener 
                 .subscribe(new RetrofitObserver<User>() {
                     @Override
                     protected void onSuccess(User user) {
+                        Utility.getInstance().hideProgressBar(progressDialog);
                         if (user != null && TextUtils.isEmpty(user.getMessage())) {
                             Bundle bundle = new Bundle();
                             bundle.putParcelable(Constants.BUNDLE_KEY, user);
@@ -128,6 +132,7 @@ public class UserCheckFragment extends Fragment implements View.OnClickListener 
 
                     @Override
                     protected void onFailure(Throwable e) {
+                        Utility.getInstance().hideProgressBar(progressDialog);
                         Utility.getInstance().showRedToast("User Not Found", getContext());
                     }
                 });

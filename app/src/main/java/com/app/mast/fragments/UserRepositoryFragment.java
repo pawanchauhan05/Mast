@@ -1,6 +1,7 @@
 package com.app.mast.fragments;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,6 +20,7 @@ import com.app.mast.retrofit.RetrofitObserver;
 import com.app.mast.services.GitHubBasicApi;
 import com.app.mast.utils.Constants;
 import com.app.mast.utils.RecyclerAdapterUtil;
+import com.app.mast.utils.Utility;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +36,7 @@ public class UserRepositoryFragment extends Fragment {
 
     private View view;
     private RecyclerView recyclerView;
+    private ProgressDialog progressDialog;
 
     public UserRepositoryFragment() {
         // Required empty public constructor
@@ -42,7 +45,6 @@ public class UserRepositoryFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_user_repository, container, false);
         initViews();
         ((MainActivity) getActivity()).setToolBarTitle("User Repositories");
@@ -52,6 +54,7 @@ public class UserRepositoryFragment extends Fragment {
 
     private void initViews() {
         recyclerView = view.findViewById(R.id.recyclerView);
+        progressDialog = new ProgressDialog(getContext());
     }
 
     private void init(final List<Repository> repositoryList, boolean isAlreadyInitialised, RecyclerView recyclerView) {
@@ -108,9 +111,10 @@ public class UserRepositoryFragment extends Fragment {
     }
 
     private void getPublicRepositories(String userName, final int pageCount, final RecyclerView recyclerView) {
+        Utility.getInstance().showProgressBar("Please wait", "Connecting to server...", progressDialog);
         Map<String, String> params = new HashMap<>();
         params.put("page", String.valueOf(pageCount));
-        params.put("per_page", String.valueOf(10));
+        params.put("per_page", String.valueOf(20));
         ApiClient
                 .getClient()
                 .create(GitHubBasicApi.class)
@@ -120,12 +124,13 @@ public class UserRepositoryFragment extends Fragment {
                 .subscribe(new RetrofitObserver<List<Repository>>() {
                     @Override
                     protected void onSuccess(List<Repository> repositoryList) {
+                        Utility.getInstance().hideProgressBar(progressDialog);
                         init(repositoryList, pageCount == 1 ? false : true, recyclerView);
                     }
 
                     @Override
                     protected void onFailure(Throwable e) {
-
+                        Utility.getInstance().hideProgressBar(progressDialog);
                     }
                 });
     }
