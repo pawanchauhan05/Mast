@@ -13,5 +13,5 @@
         android:gravity="center"
         android:text="MESSAGING IS DONE HERE"
         android:textColor="#FFF"
-        android:textSize="14sp" />
+        android:textSize="@dimen/text_size_14sp" />
 </RelativeLayout>

@@ -3,6 +3,7 @@ package com.app.mast.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,11 +35,11 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
 
     private void getBundleData() {
         Bundle bundle = getArguments();
-        if(bundle != null && bundle.containsKey(Constants.BUNDLE_KEY)) {
+        if (bundle != null && bundle.containsKey(Constants.BUNDLE_KEY)) {
             user = bundle.getParcelable(Constants.BUNDLE_KEY);
-            textViewName.setText(String.format("Name : %s", user.getName()));
+            textViewName.setText(String.format("Name : %s", TextUtils.isEmpty(user.getName()) ? "Not Available" : user.getName()));
             textViewPublicRepo.setText(String.format("Public Repository : %s", user.getPublic_repos()));
-            textViewPublicGist.setText(String.format("Public Gist: %s", user.getPublic_gists()));
+            textViewPublicGist.setText(String.format("Public Gist : %s", user.getPublic_gists()));
             textViewFollowers.setText(String.format("Followers : %s", user.getFollowers()));
             textViewFollowing.setText(String.format("Following : %s", user.getFollowing()));
             Picasso
@@ -55,7 +56,7 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         view = inflater.inflate(R.layout.fragment_user_details, container, false);
         initViews();
         initListeners();
-        ((MainActivity)getActivity()).setToolBarTitle("User Details");
+        ((MainActivity) getActivity()).setToolBarTitle("User Details");
         getBundleData();
         return view;
     }
@@ -78,7 +79,7 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buttonRepository:
-                ((MainActivity)getActivity()).replaceFragment(R.id.frameLayout, new UserRepositoryFragment(), UserRepositoryFragment.class.getName());
+                ((MainActivity) getActivity()).replaceFragment(R.id.frameLayout, new UserRepositoryFragment(), UserRepositoryFragment.class.getName());
                 break;
         }
     }

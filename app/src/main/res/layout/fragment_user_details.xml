@@ -7,37 +7,62 @@
     tools:context="com.app.mast.fragments.UserDetailsFragment">
 
     <ImageView
+        android:padding="5dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
         android:layout_gravity="center_horizontal"
         android:id="@+id/imageViewAvatar"
         android:layout_width="120dp"
         android:layout_height="120dp" />
 
     <TextView
-        android:layout_marginTop="10dp"
         android:id="@+id/textViewName"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textSize="@dimen/text_size_14sp"
+        android:textStyle="bold"
+        android:textColor="@color/color_FB8C00"
+        android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:layout_marginTop="5dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textSize="@dimen/text_size_14sp"
+        android:textColor="@color/color_383A3B"
         android:id="@+id/textViewPublicRepo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:layout_marginTop="5dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textColor="@color/color_383A3B"
+        android:textSize="@dimen/text_size_14sp"
         android:id="@+id/textViewPublicGist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:layout_marginTop="5dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textSize="@dimen/text_size_14sp"
+        android:textColor="@color/color_383A3B"
         android:id="@+id/textViewFollowers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:layout_marginTop="5dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textSize="@dimen/text_size_14sp"
+        android:textColor="@color/color_383A3B"
         android:id="@+id/textViewFollowing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -46,9 +71,11 @@
         android:textColor="@color/color_FFFFFF"
         android:backgroundTint="@color/color_0CB88F"
         android:text="Repository List"
+        android:layout_marginTop="20dp"
+        android:padding="5dp"
         android:id="@+id/buttonRepository"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="50dp" />
 
 
 </LinearLayout>

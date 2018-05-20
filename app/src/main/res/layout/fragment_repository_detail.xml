@@ -8,13 +8,17 @@
     <ImageView
         android:layout_centerHorizontal="true"
         android:id="@+id/imageViewAvatar"
+        android:layout_marginTop="15sp"
+        android:layout_marginBottom="5dp"
         android:layout_width="120dp"
         android:layout_height="120dp" />
 
     <TextView
-        android:textSize="18sp"
-        android:layout_marginTop="10dp"
+        android:textSize="@dimen/text_size_20sp"
+        android:textColor="@color/color_FB8C00"
+        android:textStyle="bold"
         android:text="Project Name"
+        android:gravity="center"
         android:layout_below="@+id/imageViewAvatar"
         android:id="@+id/textViewProjectName"
         android:layout_width="match_parent"
@@ -22,7 +26,9 @@
 
     <TextView
         android:textSize="14sp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:textColor="@color/color_383A3B"
         android:text="Project Description"
         android:layout_below="@+id/textViewProjectName"
         android:id="@+id/textViewProjectDescription"

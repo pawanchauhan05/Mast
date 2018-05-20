@@ -25,6 +25,7 @@ import com.app.mast.utils.Utility;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.adapter.rxjava2.HttpException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -125,15 +126,17 @@ public class UserCheckFragment extends Fragment implements View.OnClickListener 
 
                             ((MainActivity) getActivity()).replaceFragment(R.id.frameLayout, userDetailsFragment, UserDetailsFragment.class.getName());
 
-                        } else if (user != null && !TextUtils.isEmpty(user.getMessage()) && getString(R.string.not_found).equalsIgnoreCase(user.getMessage())) {
-
                         }
                     }
 
                     @Override
                     protected void onFailure(Throwable e) {
                         Utility.getInstance().hideProgressBar(progressDialog);
-                        Utility.getInstance().showRedToast("User Not Found", getContext());
+                        if (e instanceof HttpException) {
+                            if (((HttpException) e).code() == 404) {
+                                Utility.getInstance().showRedToast("User Not Found", getContext());
+                            }
+                        }
                     }
                 });
     }

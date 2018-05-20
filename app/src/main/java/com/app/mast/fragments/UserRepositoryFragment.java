@@ -111,7 +111,8 @@ public class UserRepositoryFragment extends Fragment {
     }
 
     private void getPublicRepositories(String userName, final int pageCount, final RecyclerView recyclerView) {
-        Utility.getInstance().showProgressBar("Please wait", "Connecting to server...", progressDialog);
+        if (pageCount == 1)
+            Utility.getInstance().showProgressBar("Please wait", "Connecting to server...", progressDialog);
         Map<String, String> params = new HashMap<>();
         params.put("page", String.valueOf(pageCount));
         params.put("per_page", String.valueOf(20));
@@ -124,13 +125,15 @@ public class UserRepositoryFragment extends Fragment {
                 .subscribe(new RetrofitObserver<List<Repository>>() {
                     @Override
                     protected void onSuccess(List<Repository> repositoryList) {
-                        Utility.getInstance().hideProgressBar(progressDialog);
+                        if (pageCount == 1)
+                            Utility.getInstance().hideProgressBar(progressDialog);
                         init(repositoryList, pageCount == 1 ? false : true, recyclerView);
                     }
 
                     @Override
                     protected void onFailure(Throwable e) {
-                        Utility.getInstance().hideProgressBar(progressDialog);
+                        if (pageCount == 1)
+                            Utility.getInstance().hideProgressBar(progressDialog);
                     }
                 });
     }
