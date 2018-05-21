@@ -15,6 +15,7 @@ import com.app.mast.R;
 import com.app.mast.activities.MainActivity;
 import com.app.mast.models.User;
 import com.app.mast.utils.Constants;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -43,11 +44,24 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
             textViewPublicGist.setText(String.format("Public Gist : %s", user.getPublic_gists()));
             textViewFollowers.setText(String.format("Followers : %s", user.getFollowers()));
             textViewFollowing.setText(String.format("Following : %s", user.getFollowing()));
+
             Picasso
                     .get()
                     .load(user.getAvatar_url())
                     .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(imageViewAvatar);
+                    .into(imageViewAvatar, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Picasso.get().load(user.getAvatar_url()).into(imageViewAvatar);
+                        }
+                    });
+
+
         }
     }
 
