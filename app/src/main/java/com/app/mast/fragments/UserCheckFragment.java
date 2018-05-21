@@ -5,6 +5,9 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -13,15 +16,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.app.mast.R;
 import com.app.mast.activities.MainActivity;
+import com.app.mast.app.AppController;
 import com.app.mast.models.User;
 import com.app.mast.retrofit.ApiClient;
 import com.app.mast.retrofit.RetrofitObserver;
 import com.app.mast.services.GitHubBasicApi;
 import com.app.mast.utils.Constants;
+import com.app.mast.utils.RecyclerAdapterUtil;
 import com.app.mast.utils.Utility;
+
+import java.util.List;
+import java.util.Map;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -37,19 +47,23 @@ public class UserCheckFragment extends Fragment implements View.OnClickListener 
     private View view;
     private TextInputLayout nameWrapper;
     private ProgressDialog progressDialog;
+    private RecyclerView recyclerView;
+    private LinearLayout linearLayoutRecentSearch;
 
     public UserCheckFragment() {
-        // Required empty public constructor
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_user_check, container, false);
+
         initViews();
         initListeners();
         validateUserName();
+
+
+        initRecyclerView();
         return view;
     }
 
@@ -57,6 +71,8 @@ public class UserCheckFragment extends Fragment implements View.OnClickListener 
         editTextUserName = view.findViewById(R.id.editTextUserName);
         buttonSubmit = view.findViewById(R.id.buttonSubmit);
         nameWrapper = view.findViewById(R.id.nameWrapper);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        linearLayoutRecentSearch = view.findViewById(R.id.linearLayoutRecentSearch);
 
         ((MainActivity) getActivity()).setToolBarTitle("Check User");
         progressDialog = new ProgressDialog(getContext());
@@ -116,17 +132,23 @@ public class UserCheckFragment extends Fragment implements View.OnClickListener 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new RetrofitObserver<User>() {
                     @Override
-                    protected void onSuccess(User user) {
-                        Utility.getInstance().hideProgressBar(progressDialog);
-                        if (user != null && TextUtils.isEmpty(user.getMessage())) {
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable(Constants.BUNDLE_KEY, user);
-                            UserDetailsFragment userDetailsFragment = new UserDetailsFragment();
-                            userDetailsFragment.setArguments(bundle);
+                    protected void onSuccess(final User user) {
 
-                            ((MainActivity) getActivity()).replaceFragment(R.id.frameLayout, userDetailsFragment, UserDetailsFragment.class.getName());
-
+                        if (AppController.getInstance().databaseHandler.getUser(user.getLogin()) == null) {
+                            AppController.getInstance().databaseHandler.addUser(user);
+                        } else {
+                            AppController.getInstance().databaseHandler.updateUser(user);
                         }
+
+                        Utility.getInstance().hideProgressBar(progressDialog);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(Constants.BUNDLE_KEY, user);
+                        UserDetailsFragment userDetailsFragment = new UserDetailsFragment();
+                        userDetailsFragment.setArguments(bundle);
+
+                        ((MainActivity) getActivity()).replaceFragment(R.id.frameLayout, userDetailsFragment, UserDetailsFragment.class.getName());
+
+
                     }
 
                     @Override
@@ -139,5 +161,44 @@ public class UserCheckFragment extends Fragment implements View.OnClickListener 
                         }
                     }
                 });
+    }
+
+    private void initRecyclerView() {
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        final List<User> userList = AppController.getInstance().databaseHandler.getAllUsers();
+        linearLayoutRecentSearch.setVisibility(userList.isEmpty() ? View.GONE : View.VISIBLE);
+
+
+        new RecyclerAdapterUtil
+                .Builder(getContext(), userList, R.layout.recent_list_item_layout)
+                .viewsList(R.id.textView)
+                .bindView(new RecyclerAdapterUtil.BindDataHelper() {
+                    @Override
+                    public void bindView(int position, Map<Integer, View> viewMap) {
+                        ((TextView) viewMap.get(R.id.textView)).setText(userList.get(position).getLogin());
+                    }
+                })
+                .addClickListener(new RecyclerAdapterUtil.ItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position, RecyclerAdapterUtil recyclerAdapterUtil) {
+                        switch (view.getId()) {
+                            default:
+                                MainActivity.USER = userList.get(position).getLogin();
+                                Utility.getInstance().hideProgressBar(progressDialog);
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelable(Constants.BUNDLE_KEY, userList.get(position));
+                                UserDetailsFragment userDetailsFragment = new UserDetailsFragment();
+                                userDetailsFragment.setArguments(bundle);
+
+                                ((MainActivity) getActivity()).replaceFragment(R.id.frameLayout, userDetailsFragment, UserDetailsFragment.class.getName());
+                                break;
+
+                        }
+                    }
+                })
+                .into(recyclerView);
     }
 }

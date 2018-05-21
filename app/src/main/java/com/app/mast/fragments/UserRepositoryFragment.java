@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,9 @@ import android.widget.TextView;
 
 import com.app.mast.R;
 import com.app.mast.activities.MainActivity;
+import com.app.mast.app.AppController;
 import com.app.mast.models.Repository;
+import com.app.mast.models.User;
 import com.app.mast.retrofit.ApiClient;
 import com.app.mast.retrofit.RetrofitObserver;
 import com.app.mast.services.GitHubBasicApi;
@@ -22,6 +25,7 @@ import com.app.mast.utils.Constants;
 import com.app.mast.utils.RecyclerAdapterUtil;
 import com.app.mast.utils.Utility;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +52,11 @@ public class UserRepositoryFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_user_repository, container, false);
         initViews();
         ((MainActivity) getActivity()).setToolBarTitle("User Repositories");
+        initAdapter(AppController.getInstance().databaseHandler.getAllRepositories(MainActivity.USER));
         getPublicRepositories(MainActivity.USER, 1, null);
         return view;
     }
+
 
     private void initViews() {
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -68,7 +74,6 @@ public class UserRepositoryFragment extends Fragment {
     }
 
     private void initAdapter(final List<Repository> repositoryList) {
-
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -111,7 +116,7 @@ public class UserRepositoryFragment extends Fragment {
     }
 
     private void getPublicRepositories(String userName, final int pageCount, final RecyclerView recyclerView) {
-        if (pageCount == 1)
+        if (pageCount == 1 && AppController.getInstance().databaseHandler.getAllRepositories(MainActivity.USER).isEmpty())
             Utility.getInstance().showProgressBar("Please wait", "Connecting to server...", progressDialog);
         Map<String, String> params = new HashMap<>();
         params.put("page", String.valueOf(pageCount));
@@ -125,9 +130,18 @@ public class UserRepositoryFragment extends Fragment {
                 .subscribe(new RetrofitObserver<List<Repository>>() {
                     @Override
                     protected void onSuccess(List<Repository> repositoryList) {
-                        if (pageCount == 1)
+
+                        if (pageCount == 1) {
                             Utility.getInstance().hideProgressBar(progressDialog);
+                            AppController.getInstance().databaseHandler.deleteRepository(MainActivity.USER);
+                        }
                         init(repositoryList, pageCount == 1 ? false : true, recyclerView);
+
+                        for (Repository repository:repositoryList) {
+                            AppController.getInstance().databaseHandler.addRepository(repository, MainActivity.USER);
+                        }
+
+
                     }
 
                     @Override
@@ -137,5 +151,6 @@ public class UserRepositoryFragment extends Fragment {
                     }
                 });
     }
+
 
 }

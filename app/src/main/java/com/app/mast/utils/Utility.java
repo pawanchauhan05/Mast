@@ -60,12 +60,12 @@ public class Utility {
     /**
      * this function is used to show default progress dialog.
      *
-     * @param title - progress dialog title
-     * @param message - progress dialog message
+     * @param title          - progress dialog title
+     * @param message        - progress dialog message
      * @param progressDialog - progress dialog object (not be null)
      */
     public void showProgressBar(String title, String message, ProgressDialog progressDialog) {
-        if(progressDialog != null) {
+        if (progressDialog != null) {
             progressDialog.setTitle(title);
             progressDialog.setMessage(message);
             progressDialog.show();
@@ -82,7 +82,7 @@ public class Utility {
         try {
             if (progressDialog != null)
                 progressDialog.cancel();
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }

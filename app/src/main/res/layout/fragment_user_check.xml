@@ -30,4 +30,25 @@
         android:text="@string/submit"
         android:textColor="@color/color_FFFFFF" />
 
+    <LinearLayout
+        android:id="@+id/linearLayoutRecentSearch"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:textStyle="bold"
+            android:text="RECENT SEARCHES"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_marginTop="10dp"
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
 </LinearLayout>
