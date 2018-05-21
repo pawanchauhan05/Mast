@@ -15,6 +15,7 @@ import com.app.mast.R;
 import com.app.mast.activities.MainActivity;
 import com.app.mast.models.User;
 import com.app.mast.utils.Constants;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -45,6 +46,7 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
             Picasso
                     .get()
                     .load(user.getAvatar_url())
+                    .networkPolicy(NetworkPolicy.OFFLINE)
                     .into(imageViewAvatar);
         }
     }

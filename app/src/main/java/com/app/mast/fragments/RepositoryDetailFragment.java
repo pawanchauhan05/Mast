@@ -13,6 +13,7 @@ import com.app.mast.R;
 import com.app.mast.activities.MainActivity;
 import com.app.mast.models.Repository;
 import com.app.mast.utils.Constants;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 
@@ -38,6 +39,7 @@ public class RepositoryDetailFragment extends Fragment {
                 Picasso
                         .get()
                         .load(repository.getOwner().getAvatar_url())
+                        .networkPolicy(NetworkPolicy.OFFLINE)
                         .into(imageViewAvatar);
             }
         }
