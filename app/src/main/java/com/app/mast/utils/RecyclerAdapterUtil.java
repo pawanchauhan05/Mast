@@ -53,9 +53,9 @@ public class RecyclerAdapterUtil extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void updateItemList(List itemList) {
-        if(this.itemList != null && !this.itemList.isEmpty()) {
+        if (this.itemList != null && !this.itemList.isEmpty()) {
             this.itemList.addAll(itemList);
-        } else{
+        } else {
             this.itemList = itemList;
         }
     }
@@ -152,12 +152,14 @@ public class RecyclerAdapterUtil extends RecyclerView.Adapter<RecyclerView.ViewH
 
         @Override
         public void onClick(View view) {
-            mOnClickListener.onItemClick(view, getAdapterPosition(), RecyclerAdapterUtil.this);
+            if (mOnClickListener != null)
+                mOnClickListener.onItemClick(view, getAdapterPosition(), RecyclerAdapterUtil.this);
         }
 
         @Override
         public boolean onLongClick(View view) {
-            mOnLongClickListener.onLongItemClick(view, getAdapterPosition(), RecyclerAdapterUtil.this);
+            if (mOnLongClickListener != null)
+                mOnLongClickListener.onLongItemClick(view, getAdapterPosition(), RecyclerAdapterUtil.this);
             return true;
         }
     }
