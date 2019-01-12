@@ -1,6 +1,7 @@
 package com.app.mast.services;
 
 
+import com.app.mast.models.Issue;
 import com.app.mast.models.Repository;
 import com.app.mast.models.User;
 
@@ -25,6 +26,10 @@ public interface GitHubBasicApi {
 
     @GET("users/{user}/repos")
     Observable<List<Repository>> getRepositories(@Path("user") String user, @QueryMap Map<String, String> params);
+
+
+    @GET("repos/{org}/{repo}/issues")
+    Observable<List<Issue>> getDetails(@Path("org") String org, @Path("repo") String repo, @QueryMap Map<String, String> params);
 
 
 }

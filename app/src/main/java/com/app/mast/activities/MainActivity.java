@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.app.mast.R;
+import com.app.mast.fragments.EntryFragment;
 import com.app.mast.fragments.UserCheckFragment;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initViews() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frameLayout, new UserCheckFragment())
+                .replace(R.id.frameLayout, new EntryFragment())
                 .commit();
     }
 

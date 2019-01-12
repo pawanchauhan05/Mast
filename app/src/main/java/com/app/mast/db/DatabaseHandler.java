@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
 
+import com.app.mast.models.Issue;
 import com.app.mast.models.Repository;
 import com.app.mast.models.User;
 
@@ -21,6 +23,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "must";
     private static final String TABLE_USERS = "users";
     private static final String TABLE_REPOSITORY = "repositories";
+    private static final String TABLE_ISSUES = "issues";
+
 
     private static final String REPOSITORY_LOGIN = "repository_login";
     private static final String REPOSITORY_NAME = "repository_name";
@@ -38,6 +42,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String USER_PUBLIC_GISTS = "user_public_gists";
     private static final String USER_FOLLOWERS = "user_followers";
     private static final String USER_FOLLOWING = "user_following";
+
+    private static final String ISSUE_USER = "issue_user";
+    private static final String ISSUE_TITLE = "issue_title";
+    private static final String ISSUE_URL = "issue_url";
+    private static final String ISSUE_STATE = "issue_state";
+    private static final String ISSUE_PR_NUMBER = "issue_pr_number";
+    private static final String ISSUE_TIME = "issue_time";
+    private static final String ISSUE_ORG = "issue_time";
+    private static final String ISSUE_REPO = "issue_repo";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -57,8 +70,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + REPOSITORY_SIZE + " INTEGER ," + REPOSITORY_WATCHERS + " INTEGER ," + REPOSITORY_OPEN_ISSUES_COUNT + " INTEGER ," + USER_FOLLOWING + " INTEGER "
                 + ")";
 
+        String CREATE_ISSUE_TABLE = "CREATE TABLE " + TABLE_ISSUES + "("
+                + ISSUE_USER + " TEXT, " + ISSUE_TITLE + " TEXT, " + ISSUE_URL + " TEXT, "
+                + ISSUE_STATE + " TEXT, " + ISSUE_PR_NUMBER + " INTEGER, "
+                + ISSUE_TIME + " TEXT, "  + ISSUE_ORG + " TEXT, " + ISSUE_REPO + " TEXT "
+                + ")";
+
         db.execSQL(CREATE_CONTACTS_TABLE);
         db.execSQL(CREATE_REPOSITORY_TABLE);
+        db.execSQL(CREATE_ISSUE_TABLE);
     }
 
 
@@ -102,6 +122,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(REPOSITORY_SIZE, repository.getSize());
         values.put(REPOSITORY_WATCHERS, repository.getWatchers());
         values.put(REPOSITORY_USER_AVATAR_URL, repository.getOwner().getAvatar_url());
+
+        db.insert(TABLE_REPOSITORY, null, values);
+        db.close();
+    }
+
+    public void addIssue(Issue issue, String org, String repo, String time) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ISSUE_ORG, org);
+        values.put(ISSUE_REPO, repo);
+        values.put(ISSUE_STATE, issue.getState());
+        values.put(ISSUE_PR_NUMBER, issue.getNumber());
+        values.put(ISSUE_USER, issue.getUser() != null && !TextUtils.isEmpty(issue.getUser().getLogin()) ? issue.getUser().getLogin() : "NA");
+        values.put(ISSUE_TIME, time);
+        values.put(ISSUE_URL, issue.getPull_request() != null && !TextUtils.isEmpty(issue.getPull_request().getPatch_url()) ? issue.getPull_request().getPatch_url() : "NA");
+        values.put(ISSUE_TITLE, !TextUtils.isEmpty(issue.getTitle()) ? issue.getTitle(): "NA");
 
         db.insert(TABLE_REPOSITORY, null, values);
         db.close();

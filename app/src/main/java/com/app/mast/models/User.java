@@ -3,9 +3,6 @@ package com.app.mast.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.orm.SugarRecord;
-
-import io.realm.RealmObject;
 
 /**
  * Created by pawansingh on 19/05/18.

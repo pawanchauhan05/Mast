@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="horizontal">
+
+    <View
+        android:layout_width="5dp"
+        android:layout_height="match_parent"
+        android:background="@color/color_0CB88F" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/textViewUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Android Utility"
+            android:textColor="@color/color_383A3B"
+            android:textSize="@dimen/text_size_14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Android Utility"
+            android:textColor="@color/color_383A3B"
+            android:textSize="@dimen/text_size_14sp" />
+
+
+        <TextView
+            android:id="@+id/textViewUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:autoLink="web"
+            android:text="https://api.github.com/users/pawanchauhan05/repos"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:id="@+id/textViewPRNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="14sp" />
+
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>
